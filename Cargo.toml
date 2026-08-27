@@ -1,0 +1,78 @@
+[workspace]
+members = [
+    "crates/grokctl-app",
+    "crates/grokctl-core",
+    "crates/grokctl-manifest",
+    "crates/grokctl-test-support",
+    "xtask",
+]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+repository = "https://github.com/douglance/grokctl"
+authors = ["Douglas Lance"]
+readme = "README.md"
+keywords = ["cli", "mcp", "grok", "automation"]
+categories = ["command-line-utilities", "api-bindings"]
+
+[workspace.dependencies]
+aes = { version = "0.9.2", features = ["zeroize"] }
+aes-gcm = { version = "0.11.1", features = ["zeroize"] }
+async-stream = "0.3.6"
+axum = "0.8.4"
+base64 = "0.22.1"
+cbc = { version = "0.2.1", features = ["zeroize"] }
+dirs = "6.0.0"
+futures-util = "0.3.31"
+hex = "0.4.3"
+incurs = { version = "=0.5.3", features = ["mcp"] }
+pbkdf2 = "0.13.0"
+reqwest = { version = "0.12.23", default-features = false, features = ["gzip", "json", "rustls-tls", "stream"] }
+rusqlite = { version = "0.37.0", features = ["bundled"] }
+schemars = "1.0.4"
+secrecy = "0.10.3"
+security-framework = "3.7.0"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.143"
+sha2 = "0.10.9"
+sha1 = { version = "0.11.0", features = ["zeroize"] }
+sysinfo = { version = "0.36.1", default-features = false, features = ["system"] }
+tempfile = "3.21.0"
+thiserror = "2.0.16"
+tokio = { version = "1.47.1", features = ["fs", "macros", "net", "rt-multi-thread", "signal", "sync", "time"] }
+tokio-util = { version = "0.7.16", features = ["rt"] }
+toml = "0.9.5"
+url = { version = "2.5.7", features = ["serde"] }
+uuid = { version = "1.18.0", features = ["serde", "v4"] }
+zeroize = "1.8.1"
+
+[workspace.lints.rust]
+missing_docs = "deny"
+rust_2018_idioms = { level = "deny", priority = -1 }
+unsafe_code = "forbid"
+unused_lifetimes = "deny"
+unused_qualifications = "deny"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -4 }
+cargo = { level = "deny", priority = -4 }
+nursery = { level = "deny", priority = -4 }
+pedantic = { level = "deny", priority = -4 }
+cognitive_complexity = "deny"
+dbg_macro = "deny"
+excessive_nesting = "deny"
+expect_used = "deny"
+large_futures = "deny"
+multiple_crate_versions = "allow"
+panic = "deny"
+todo = "deny"
+too_many_arguments = "deny"
+too_many_lines = "deny"
+type_complexity = "deny"
+unimplemented = "deny"
+unwrap_used = "deny"
+wildcard_imports = "deny"

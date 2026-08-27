@@ -1,0 +1,7 @@
+msrv = "1.88"
+cognitive-complexity-threshold = 10
+excessive-nesting-threshold = 3
+too-many-arguments-threshold = 5
+too-many-lines-threshold = 40
+type-complexity-threshold = 120
+warn-on-all-wildcard-imports = true

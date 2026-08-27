@@ -1,0 +1,7 @@
+/target/
+/.coverage/
+/.env
+/.env.*
+*.pem
+*.key
+gateway.json
