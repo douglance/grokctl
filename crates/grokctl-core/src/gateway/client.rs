@@ -58,9 +58,7 @@ struct GatewayRequest<'a> {
 
 impl GatewayClient {
     /// Construct a client with redirects disabled.
-    ///
     /// # Errors
-    ///
     /// Returns [`GatewayError`] if the HTTP client cannot be constructed.
     pub fn new(
         gateway: ResolvedGateway,
@@ -75,9 +73,7 @@ impl GatewayClient {
     }
 
     /// Read unauthenticated host health.
-    ///
     /// # Errors
-    ///
     /// Returns [`GatewayError`] for transport, status, or JSON failures.
     pub async fn health(&self) -> Result<HealthResponse, GatewayError> {
         let value = self
@@ -98,9 +94,7 @@ impl GatewayClient {
     }
 
     /// Call `POST /api/<command>` with an optional JSON body.
-    ///
     /// # Errors
-    ///
     /// Returns [`GatewayError`] for missing auth, transport, status, or JSON failures.
     pub async fn command(
         &self,
@@ -119,9 +113,7 @@ impl GatewayClient {
     }
 
     /// Call a host command and deserialize its typed response.
-    ///
     /// # Errors
-    ///
     /// Returns [`GatewayError`] for gateway or response decoding failures.
     pub async fn command_typed<T: DeserializeOwned>(
         &self,
