@@ -5,13 +5,12 @@ mod support;
 use std::error::Error;
 use std::process::Output;
 
-use grokctl_test_support::MockGateway;
 use serde_json::json;
-use support::TestCli;
+use support::{MockGateway, MockResponse, TestCli};
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn template_mutations_enforce_idempotency_and_unsafe_mode() -> Result<(), Box<dyn Error>> {
-    let gateway = MockGateway::start(json!({ "ok": true })).await?;
+    let gateway = gateway(json!({ "ok": true })).await?;
     let cli = TestCli::new()?;
 
     assert_failure(&cli.run(
@@ -28,7 +27,7 @@ async fn template_mutations_enforce_idempotency_and_unsafe_mode() -> Result<(), 
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn invalid_visibility_is_rejected_before_network_io() -> Result<(), Box<dyn Error>> {
-    let gateway = MockGateway::start(json!({ "ok": true })).await?;
+    let gateway = gateway(json!({ "ok": true })).await?;
     let cli = TestCli::new()?;
     let output = cli.run(
         &gateway.base_url,
@@ -52,7 +51,7 @@ async fn invalid_visibility_is_rejected_before_network_io() -> Result<(), Box<dy
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn idempotent_replay_does_not_send_a_second_request() -> Result<(), Box<dyn Error>> {
-    let gateway = MockGateway::start(json!({ "created": true })).await?;
+    let gateway = gateway(json!({ "created": true })).await?;
     let cli = TestCli::new()?;
     let args = [
         "bot",
@@ -89,6 +88,10 @@ fn destructive_arguments() -> Vec<Vec<&'static str>> {
         ],
         vec!["bot", "template", "delete", "share-1", "--idempotency-key", "guard-delete-v1"],
     ]
+}
+
+async fn gateway(body: serde_json::Value) -> Result<MockGateway, Box<dyn Error>> {
+    MockGateway::start_responses(vec![MockResponse { status: 200, body }]).await
 }
 
 fn assert_success(output: &Output) {

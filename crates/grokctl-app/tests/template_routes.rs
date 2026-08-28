@@ -5,9 +5,8 @@ mod support;
 use std::error::Error;
 use std::process::Output;
 
-use grokctl_test_support::{MockGateway, MockResponse};
 use serde_json::{Value, json};
-use support::TestCli;
+use support::{MockGateway, MockResponse, TestCli};
 
 type ExpectedRequest = (String, Option<Value>);
 
