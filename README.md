@@ -22,8 +22,8 @@
   <a href="https://github.com/douglance/grokctl/blob/main/Cargo.toml"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square"></a>
 </p>
 
-`grokctl` controls an authorized Grok Bot Sand gateway from a Rust command-line
-interface (CLI) or Model Context Protocol (MCP) stdio server. It keeps bearer tokens out of output, warns when the live host
+`grokctl` controls an authorized Grok Bot Sand gateway from a Rust command-line interface (CLI)
+or Model Context Protocol (MCP) stdio server. It keeps bearer tokens out of output, warns when the live host
 drifts from the pinned compatibility seed, records mutation witnesses in
 SQLite, and exposes the same command graph to humans and agents.
 
@@ -148,9 +148,8 @@ definitions. There is no parallel wrapper to drift.
 
 ## Compatibility evidence
 
-See [`docs/research.md`](docs/research.md) for the reconstructed and software
-development kit (SDK) source lines behind the transport, safety, discovery, and
-prompt-workflow decisions.
+See [`docs/research.md`](docs/research.md) for the reconstructed and software development kit (SDK)
+source lines behind the transport, safety, discovery, and prompt-workflow decisions.
 
 Refresh the compatibility manifest only from an authorized host source snapshot:
 
