@@ -16,7 +16,6 @@
 
 <p align="center">
   <a href="https://crates.io/crates/grokctl"><img alt="Crates.io version" src="https://img.shields.io/crates/v/grokctl?style=flat-square"></a>
-  <a href="https://crates.io/crates/grokctl"><img alt="Crates.io downloads" src="https://img.shields.io/crates/d/grokctl?style=flat-square"></a>
   <a href="https://docs.rs/grokctl"><img alt="docs.rs" src="https://img.shields.io/docsrs/grokctl?style=flat-square"></a>
   <a href="https://github.com/douglance/grokctl/blob/main/rust-toolchain.toml"><img alt="Rust 1.88" src="https://img.shields.io/badge/rust-1.88%2B-f46623?style=flat-square"></a>
   <a href="https://github.com/douglance/grokctl/blob/main/Cargo.toml"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-111827?style=flat-square"></a>
