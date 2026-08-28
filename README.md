@@ -61,6 +61,8 @@ Use a gateway URL and bearer token at runtime:
 ```console
 export GROKCTL_GATEWAY_URL=https://bot-host.example
 export GROKCTL_GATEWAY_TOKEN=replace-me
+# Optional: store mutation receipts in an explicit directory.
+export GROKCTL_DATA_DIR=/path/to/grokctl-data
 grokctl profile show --format json
 grokctl gateway health --format json
 grokctl bot list --format json

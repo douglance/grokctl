@@ -223,10 +223,16 @@ fn mutation_receipt(
 }
 
 pub fn open_journal() -> Result<ReceiptJournal, CallError> {
-    let base = dirs::data_local_dir().unwrap_or_else(std::env::temp_dir);
-    let directory = base.join("grokctl");
+    let directory = journal_directory();
     fs::create_dir_all(&directory).map_err(CallError::ReceiptDirectory)?;
     Ok(ReceiptJournal::open(directory.join("receipts.sqlite3"))?)
+}
+
+fn journal_directory() -> PathBuf {
+    std::env::var_os("GROKCTL_DATA_DIR").map_or_else(
+        || dirs::data_local_dir().unwrap_or_else(std::env::temp_dir).join("grokctl"),
+        PathBuf::from,
+    )
 }
 
 fn output(
