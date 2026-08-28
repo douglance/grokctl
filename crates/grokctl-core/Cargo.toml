@@ -43,7 +43,7 @@ zeroize.workspace = true
 security-framework.workspace = true
 
 [dev-dependencies]
-grokctl-test-support = { path = "../grokctl-test-support", version = "0.1.0" }
+grokctl-test-support = { path = "../grokctl-test-support" }
 tempfile.workspace = true
 
 [lints]
