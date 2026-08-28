@@ -3,6 +3,7 @@
 mod extract;
 mod format;
 mod markers;
+mod observed;
 mod policy;
 mod seed;
 mod validate;

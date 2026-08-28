@@ -84,3 +84,32 @@ because the host exposes neither `listCommands` nor per-command JSON schemas
 - No approval bypass. `resolveAutoReviewApproval` and `resolveLocalToolPermission` are blocked.
 - No claim that the 0.18 command set matches the currently installed desktop app.
 - No automatic call to an unknown host command without explicit unsafe and idempotency inputs.
+
+## Grok Bot 0.29 template sharing
+
+The August 28, 2026 announcement introduced public Bot templates. The official management guide
+states that a recipient can preview a public link and add an account-local copy; the copy excludes
+the owner's computer, logins, and conversation history. It also warns that the shared identity,
+description, skills, and routines are public configuration
+([Create and manage Bots](https://docs.x.ai/grok-bot/bots#share-a-bot)).
+
+The authorized local Grok Bot 0.29.0 bundle, with `app.asar` integrity hash
+`c98ed927a71a5c547617bca79e6b3f94aa6bcfbd3d646763e62ffa63a2ace83e`, exposes these coordinator
+methods:
+
+- `createAgentFromTemplate`
+- `publishBotTemplate`
+- `listBotTemplates`
+- `getBotTemplateVersion`
+- `getBotTemplateForSourceAgent`
+- `deleteBotTemplate`
+- `setBotTemplateVisibility`
+
+The same bundle constructs public URLs as `https://x.ai/bot/<shareId>` and validates 21-character
+URL-safe share IDs. Its add flow sends the share ID, a stable new Bot ID, name, avatar shape,
+avatar color, and expected active version. Publishing sends the share ID and version. Visibility
+uses `public` or `team`.
+
+`grokctl` treats list and get operations as reads, adding a copy as an open-world mutation, and
+publish, visibility, and delete as unsafe open-world operations. Draft creation is deliberately
+absent because Grok Bot mediates it through the approval layer.

@@ -48,6 +48,12 @@ cargo build --release
 ./target/release/grokctl --help
 ```
 
+For local development, enable the checked-in `direnv` profile:
+
+```console
+direnv allow
+```
+
 ## Connect
 
 Use a gateway URL and bearer token at runtime:
@@ -76,17 +82,69 @@ grokctl bot create \
 grokctl bot prompt "Release Captain" "Summarize current work" \
   --idempotency-key prompt-release-captain-20260828 \
   --wait true \
+  --timeout-seconds 180 \
+  --interval-ms 1000 \
   --format json
 grokctl gateway call getHostStatus --format json
 grokctl gateway events agents --limit 5 --timeout-seconds 10 --format jsonl
 grokctl manifest check --format json
 ```
 
+### Share Bot templates
+
+Grok Bot 0.29 added public template links. Draft a minimal template through the Bot's reviewed
+approval flow first:
+
+```console
+grokctl bot prompt BOT_ID \
+  "Create a shareable template from yourself. Exclude credentials and private data." \
+  --idempotency-key draft-release-bot-v1 \
+  --wait true \
+  --timeout-seconds 180 \
+  --interval-ms 1000 \
+  --format json
+```
+
+After Grok Bot posts the reviewed draft and its share ID, inspect and publish that version with
+the typed `bot template` commands:
+
+```console
+grokctl bot template for-bot BOT_ID --format json
+grokctl bot template version SHARE_ID VERSION --format json
+grokctl bot template publish SHARE_ID VERSION \
+  --idempotency-key publish-release-bot-v1 \
+  --unsafe-mode true \
+  --format json
+grokctl bot template list --format json
+grokctl bot template visibility SHARE_ID public \
+  --idempotency-key make-release-bot-public-v1 \
+  --unsafe-mode true \
+  --format json
+```
+
+Add a copy after reviewing the public template preview. Use a stable new Bot ID so a retry keeps
+the same identity:
+
+```console
+grokctl bot template add SHARE_ID NEW_BOT_ID "Release Captain" SHAPE COLOR VERSION \
+  --idempotency-key add-release-bot-v1 \
+  --format json
+```
+
+Publishing, changing the audience, and deleting a template require `--unsafe-mode true` because
+they change public or team-visible state. Adding a template copies configuration into your
+account; it does not copy the owner's computer, credentials, conversation history, or attachments.
+
+Template drafting remains inside Grok Bot's reviewed approval flow. `grokctl` does not bypass that
+approval to create or modify a draft. Team visibility requires a Grok Bot team; otherwise publish
+only configuration that is safe to expose publicly.
+
 The CLI surface is intentionally broad but typed:
 
 | Area | Commands |
 | --- | --- |
 | Bots | `bot count`, `bot create`, `bot delete`, `bot duplicate`, `bot kickstart`, `bot list`, `bot prompt`, `bot search`, `bot transcript-tail`, `bot update` |
+| Templates | `bot template add`, `delete`, `for-bot`, `list`, `publish`, `version`, `visibility` |
 | Gateway | `gateway avatar`, `gateway call`, `gateway events`, `gateway health` |
 | Host | `computer`, `host`, `media`, `memory`, `routine`, `workflow` |
 | Integrations | `mcp add`, `mcp doctor`, `skills add`, `skills list`, `completions` |

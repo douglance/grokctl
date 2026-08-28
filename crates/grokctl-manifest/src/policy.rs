@@ -51,15 +51,15 @@ pub fn classify_command(name: &str) -> CommandPolicy {
         "resolveAutoReviewApproval" | "resolveLocalToolPermission" => CommandEffect::Excluded,
         _ if is_destructive_command(name) => CommandEffect::Destructive,
         _ if is_read_command(name) => CommandEffect::Read,
-        _ if crate::seed::is_seed_command(name) => CommandEffect::Mutation,
+        _ if is_known_command(name) => CommandEffect::Mutation,
         _ => CommandEffect::Destructive,
     };
-    let open_world = is_open_world(name) || !crate::seed::is_seed_command(name);
+    let open_world = is_open_world(name) || !is_known_command(name);
     CommandPolicy { name: name.to_owned(), effect, open_world }
 }
 
 fn is_read_command(name: &str) -> bool {
-    crate::seed::is_seed_command(name)
+    is_known_command(name)
         && (name.starts_with("get")
             || name.starts_with("list")
             || name.starts_with("count")
@@ -67,6 +67,10 @@ fn is_read_command(name: &str) -> bool {
             || name.starts_with("read")
             || name.starts_with("is")
             || matches!(name, "skillsCatalog" | "promptAcceptanceStatus"))
+}
+
+fn is_known_command(name: &str) -> bool {
+    crate::seed::is_seed_command(name) || crate::observed::is_observed_command(name)
 }
 
 fn is_open_world(name: &str) -> bool {
@@ -79,6 +83,10 @@ fn is_open_world(name: &str) -> bool {
             | "executeRoutedMcpTool"
             | "publishSkill"
             | "connectChannel"
+            | "createAgentFromTemplate"
+            | "publishBotTemplate"
+            | "deleteBotTemplate"
+            | "setBotTemplateVisibility"
     )
 }
 
@@ -104,6 +112,9 @@ fn is_destructive_command(name: &str) -> bool {
             | "connectChannel"
             | "disconnectChannel"
             | "refreshChannel"
+            | "publishBotTemplate"
+            | "deleteBotTemplate"
+            | "setBotTemplateVisibility"
     )
 }
 
@@ -121,5 +132,25 @@ mod tests {
         assert_eq!(classify_command("getHostStatus").effect, CommandEffect::Read);
         assert_eq!(classify_command("createAgent").effect, CommandEffect::Mutation);
         assert_eq!(classify_command("deleteAgent").effect, CommandEffect::Destructive);
+    }
+
+    #[test]
+    fn observed_template_commands_have_specific_effects() {
+        let reads = ["listBotTemplates", "getBotTemplateVersion", "getBotTemplateForSourceAgent"];
+        let create = classify_command("createAgentFromTemplate");
+        let destructive = ["publishBotTemplate", "deleteBotTemplate", "setBotTemplateVisibility"];
+
+        for name in reads {
+            let policy = classify_command(name);
+            assert_eq!(policy.effect, CommandEffect::Read);
+            assert!(!policy.open_world);
+        }
+        assert_eq!(create.effect, CommandEffect::Mutation);
+        assert!(create.open_world);
+        for name in destructive {
+            let policy = classify_command(name);
+            assert_eq!(policy.effect, CommandEffect::Destructive);
+            assert!(policy.open_world);
+        }
     }
 }

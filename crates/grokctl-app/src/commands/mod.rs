@@ -14,6 +14,7 @@ mod profile;
 mod receipt;
 mod registry;
 mod routine;
+mod template;
 mod workflow;
 
 pub use registry::groups;

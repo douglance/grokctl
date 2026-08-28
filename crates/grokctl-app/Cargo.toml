@@ -1,7 +1,7 @@
 [package]
 name = "grokctl"
 description = "Rust CLI and MCP server for controlling Grok Bot"
-version = "0.1.1"
+version = "0.1.2"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -15,7 +15,7 @@ categories.workspace = true
 base64.workspace = true
 dirs.workspace = true
 grokctl-core = { path = "../grokctl-core", version = "0.1.0" }
-grokctl-manifest = { path = "../grokctl-manifest", version = "0.1.0" }
+grokctl-manifest = { path = "../grokctl-manifest", version = "0.1.1" }
 incurs.workspace = true
 schemars.workspace = true
 serde.workspace = true

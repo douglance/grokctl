@@ -109,6 +109,20 @@ pub async fn raw_call(
     typed_result(call_host(&context.args.command, &context.options).await)
 }
 
+pub async fn call_host_json(
+    command: &str,
+    options: &CallOptions,
+    body: Value,
+) -> TypedResult<CallOutput> {
+    let mut options = options.clone();
+    options.body = Some(body.to_string());
+    typed_result(call_host(command, &options).await)
+}
+
+pub async fn call_host_empty(command: &str, options: &CallOptions) -> TypedResult<CallOutput> {
+    typed_result(call_host(command, options).await)
+}
+
 pub async fn call_host(command: &str, options: &CallOptions) -> Result<CallOutput, CallError> {
     let policy = classify_command(command);
     enforce_policy(&policy, options)?;

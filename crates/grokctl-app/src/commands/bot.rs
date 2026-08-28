@@ -49,6 +49,7 @@ struct PromptOptions {
 pub fn group() -> Cli {
     Cli::create("bot")
         .description("List, inspect, and prompt Bots")
+        .group(super::template::group())
         .command("list", list_command())
         .command("prompt", prompt_command())
         .command("count", fixed_command("count", "countAgents", "Count Bots"))
